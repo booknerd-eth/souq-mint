@@ -1,6 +1,5 @@
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from "react";
-import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
@@ -17,7 +16,7 @@ export default function Home() {
         <title>TheArtOfOri</title>
         <link rel="icon" href="/favicon.ico" />
   
-        <meta property="og:title" content="Boring Bananas Co." key="ogtitle" />
+        <meta property="og:title" content="TheArtOfOri" key="ogtitle" />
         <meta property="og:description" content="Here is mint.theartofori.com." key="ogdesc" />
         <meta property="og:type" content="website" key="ogtype" />
         <meta property="og:url" content="https://mint.theartofori.com/" key="ogurl"/>
@@ -27,7 +26,7 @@ export default function Home() {
         <meta name="twitter:card" content="summary_large_image" key="twcard"/>
         <meta property="twitter:domain" content="mint.theartofori.com" key="twdomain" />
         <meta property="twitter:url" content="https://mint.theartofori.com/" key="twurl" />
-        <meta name="twitter:title" content="Boring Bananas Co." key="twtitle" />
+        <meta name="twitter:title" content="TheArtOfOri" key="twtitle" />
         <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
         <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
       </Head>
