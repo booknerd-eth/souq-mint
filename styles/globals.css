@@ -1,9 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-text{
+  font-family: "Good Times", "Microsoft JhengHei", sans-serif !important;
+  font-feature-settings: "kern";
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: bold;
+  /* padding: 15vh 20px 20px; */
+  -webkit-box-align: center;
+  align-items: center;
+  letter-spacing: 0.16em;
+  color: rgb(255, 255, 255);
+  text-shadow: rgb(255 0 220) 0px 4px 10px;
+  text-transform: uppercase;
+}
+
+.btn-mint {
+  cursor: pointer;
+  transition: all 0.5s ease-in-out 0s;
+  letter-spacing: 0.16em;
+  text-shadow: rgb(255 0 220) 0px 4px 10px;
+  text-transform: uppercase;
+  color: rgb(255, 255, 255);
+  border: 2px solid rgb(255, 255, 255);
+  box-sizing: border-box;
+  background: none !important;
+  /* padding: 25px 21px !important; */
+  border-radius: 0px !important;
+  box-shadow: rgb(255 0 220) 0px 0px 10px, rgb(255 0 220) 0px 0px 10px inset !important;
+}
+
+.modal-content{
+  border-radius: 0.6rem !important;
+  color: #4a4a4a !important;
+}
+
+.custom-menu {
+  text-decoration-line: none !important;
+}
+
+a {
+  text-decoration-line: none !important;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Good Times", "Microsoft JhengHei", sans-serif !important;
+  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
 }
 
 * {

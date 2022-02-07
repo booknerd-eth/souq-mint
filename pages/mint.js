@@ -1,10 +1,10 @@
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
-
-
+import { Ratio } from "react-bootstrap";
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
 
@@ -12,7 +12,7 @@ export default function Home() {
   const [modalShow, setModalShow] = useState(false);
 
   return (
-    <div className="w-full h-screen min-h-screen bg-main-page-pattern bg-cover bg-center bg-no-repeat">
+    <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
       <Head>
         <title>TheArtOfOri</title>
         <link rel="icon" href="/favicon.ico" />
@@ -31,9 +31,21 @@ export default function Home() {
         <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
         <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
       </Head>
-      <Header />
+      <Header />    
       <main>
-        <img src="./images/demo-main-page-logo.png" class="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="250" style={{maxWidth:250}} />
+        <h1 className="text-3xl md:text-4xl custom-text">
+          MINT YOUR BADGE
+        </h1>        
+        <div style={{ width: 300, height: '' }}>
+          <Ratio aspectRatio="1x1">
+            <video width="320" height="240" loop autoPlay muted>
+              <source src="./images/1.mp4" type="video/mp4"/>
+            </video>               
+          </Ratio> 
+        </div>    
+        <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
+          Connect Wallet
+        </button>        
       </main> 
       <Footer />
      <ModalConnectWallet
