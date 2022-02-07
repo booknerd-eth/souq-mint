@@ -1,5 +1,6 @@
 import Head from 'next/head'
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
@@ -29,8 +30,18 @@ export default function Home() {
         <meta name="twitter:title" content="TheArtOfOri" key="twtitle" />
         <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
         <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
-      </Head>
-      <Header />    
+      </Head> 
+      <div className="flex items-center custom-text justify-between w-full p-3">
+        <Link href="/" className=""><img src="images/logo.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
+        <nav className="flex flex-wrap flex-row justify-around">
+          <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
+            MINT YOUR BADGE
+          </Link>
+          <button className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
+            CONNECT WALLET
+          </button>        
+        </nav>
+      </div>  
       <main>
         <h1 className="text-3xl md:text-4xl custom-text">
           MINT YOUR BADGE
