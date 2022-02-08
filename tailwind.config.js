@@ -7,8 +7,8 @@ module.exports = {
   theme: {
     extend: { 
       backgroundImage: {
-        'mint-page-pattern': "url('/images/mint-page_bg.jpg')",
-        'main-page-pattern': "url('/images/main-page.jpg')",
+        'mint-page-pattern': "url('/images/bg_mint.jpg')",
+        'main-page-pattern': "url('/images/bg_landing1.jpg')",
        }
     },
   },
