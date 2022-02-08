@@ -25,7 +25,7 @@ export default function Home() {
     <div className="w-full h-screen min-h-screen bg-main-page-pattern bg-cover bg-center bg-no-repeat">
       <Head>
         <title>TheArtOfOri</title>
-        <link rel="icon" href="/mark.png" />
+        <link rel="icon" href="/logo_ori.png" />
   
         <meta property="og:title" content="TheArtOfOri" key="ogtitle" />
         <meta property="og:description" content="Here is mint.theartofori.com." key="ogdesc" />
