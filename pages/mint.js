@@ -1,21 +1,32 @@
 import Head from 'next/head'
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useContext } from "react";
 import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
 import { Ratio } from "react-bootstrap";
+
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
 
-export default function Home() {
+import {ADDRESS, ABI} from "../config.js"
+
+import { WalletContext } from '../context/Web3Context';
+
+export default function Mint() {
   const [modalShow, setModalShow] = useState(false);
 
+  const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, totalSupply, setTotalSupply, tokenPrice, setTokenPrice } = React.useContext(WalletContext);
+  
+  if(signedIn == true){
+    let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
+  }  
+  
   return (
     <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
       <Head>
         <title>TheArtOfOri</title>
-        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" href="/mark.png" />
   
         <meta property="og:title" content="TheArtOfOri" key="ogtitle" />
         <meta property="og:description" content="Here is mint.theartofori.com." key="ogdesc" />
@@ -32,14 +43,25 @@ export default function Home() {
         <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
       </Head> 
       <div className="flex items-center custom-text justify-between w-full p-3">
-        <Link href="/" className=""><img src="images/logo.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
+        <Link href="/" className=""><img src="images/mark.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
             MINT YOUR BADGE
           </Link>
-          <button className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
-            CONNECT WALLET
-          </button>        
+          { signedIn != true ?
+            <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
+              CONNECT WALLET
+            </a>        
+            :
+            <>
+              <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6">
+                {reduceWallet}
+              </a>
+              <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => signOut()}>
+                Disconnect
+              </a>                             
+            </>
+          }
         </nav>
       </div>  
       <main>
@@ -53,14 +75,22 @@ export default function Home() {
             </video>               
           </Ratio> 
         </div>    
-        <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
-          Connect Wallet
-        </button>        
+        { signedIn != true ?
+          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
+            Connect Wallet
+          </button>  
+         :
+          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5">
+            Mint Badge
+          </button>       
+        }
       </main> 
       <Footer />
      <ModalConnectWallet
         show={modalShow}
         onHide={() => setModalShow(false)}
+        signin={signIn}
+        signedin={signedIn}
       />
      </div>
   )

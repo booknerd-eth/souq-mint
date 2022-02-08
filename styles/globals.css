@@ -39,6 +39,7 @@
 
 .custom-menu {
   text-decoration-line: none !important;
+  cursor: pointer
 }
 
 a {
