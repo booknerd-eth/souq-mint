@@ -68,10 +68,10 @@ export default function Mint() {
         <h1 className="text-3xl md:text-4xl custom-text">
           MINT YOUR BADGE
         </h1>        
-        <div style={{ width: 300, height: '' }}>
+        <div style={{ width: 320, height: '' }}>
           <Ratio aspectRatio="1x1">
-            <video width="320" height="240" loop autoPlay muted>
-              <source src="./images/1.mp4" type="video/mp4"/>
+            <video width="320" height="320" loop autoPlay muted>
+              <source src="./images/3278_SQ_Green-V.webm" type="video/mp4"/>
             </video>               
           </Ratio> 
         </div>    

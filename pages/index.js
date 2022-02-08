@@ -59,7 +59,7 @@ export default function Home() {
         </nav>
       </div> 
       <main>
-        <img src="./images/Theartofori_green_card.png" class="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="250" style={{maxWidth:250}} />
+        <img src="./images/logo_ori.png" class="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="320" style={{maxWidth:320}} />
       </main> 
       <Footer />
      <ModalConnectWallet
