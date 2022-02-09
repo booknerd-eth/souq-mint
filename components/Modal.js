@@ -68,12 +68,19 @@ const ModalConnectWallet = (props) => {
             </Modal.Header>
             <Modal.Body>
               <h5>Please select a wallet to connect to this dapp</h5>
-              <div className="m-3">
-                <button type="button" onClick={props.signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-50 hover:border-gray-300 flex items-center p-3">
-                  <img src="./images/metamask.png" className="mr-3" width="30"/>
+              { props.signedin != true ?
+                <button type="button" onClick={props.signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3">
+                  <img src="./images/metamask.png" className="mx-3" width="30"/>
                   MetaMask
+                </button>     
+                :
+                <button type="button" onClick={props.signin} className="rounded-full w-full text-xl bg-gray-300 shadow-lg shadow-cyan-500/50 border-2 border-gray-300 flex items-center p-3 my-3">
+                  <img src="./images/metamask.png" className="mx-3" width="30"/>
+                  MetaMask
+                  <span className="flex w-full justify-end italic text-sm pr-3">
+                    ( connected )</span>
                 </button>
-              </div>
+              }
               <Accordion defaultActiveKey="1">
                 <Accordion.Item eventKey="0">
                   <Accordion.Header className="border-0" style={{color:'#0d6efd'}}>What is a wallet?</Accordion.Header>

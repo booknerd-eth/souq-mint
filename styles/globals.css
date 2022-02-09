@@ -28,7 +28,7 @@
   box-sizing: border-box;
   background: none !important;
   /* padding: 25px 21px !important; */
-  border-radius: 0px !important;
+  border-radius: 0.5rem !important;
   box-shadow: rgb(255 0 220) 0px 0px 10px, rgb(255 0 220) 0px 0px 10px inset !important;
 }
 

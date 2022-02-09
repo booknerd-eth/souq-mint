@@ -4,7 +4,7 @@ import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
-import { Ratio } from "react-bootstrap";
+import { Button, Ratio } from "react-bootstrap";
 
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
@@ -16,11 +16,17 @@ import { WalletContext } from '../context/Web3Context';
 export default function Mint() {
   const [modalShow, setModalShow] = useState(false);
 
-  const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, totalSupply, setTotalSupply, tokenPrice, setTokenPrice } = React.useContext(WalletContext);
+  const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
+          totalSupply, setTotalSupply, tokenPrice, setTokenPrice,  tokenName,
+          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount } = React.useContext(WalletContext);
   
   if(signedIn == true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
   }  
+
+  useEffect(() => {
+    setModalShow(false);
+  },[signedIn]);
   
   return (
     <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
@@ -54,7 +60,7 @@ export default function Mint() {
             </a>        
             :
             <>
-              <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6">
+              <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => setModalShow(true)}>
                 {reduceWallet}
               </a>
               <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => signOut()}>
@@ -80,10 +86,14 @@ export default function Mint() {
             Connect Wallet
           </button>  
          :
-          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5">
-            Mint Badge
-          </button>       
+          <>
+            <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
+            <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5">
+              Mint Badge
+            </button>       
+          </>
         }
+
       </main> 
       <Footer />
      <ModalConnectWallet

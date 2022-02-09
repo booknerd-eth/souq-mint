@@ -20,6 +20,12 @@ const WalletContextProvider = ({children}) => {
   // INFO FROM SMART Contract
   const [totalSupply, setTotalSupply] = useState(0)
   const [tokenPrice, setTokenPrice] = useState(0)
+  const [tokenName, setTokenName] = useState('')
+  const [tokenSymbol, setTokenSymbol] = useState('')
+  const [tokenOwner, setTokenOwner] = useState('')
+  const [tokenUri, setTokenUri] = useState('')
+  const [maxTokenCount, setMaxTokenCount] = useState(0)
+  const [currentTokenCount, setCurrentTokenCount] = useState(0)
 
   useEffect( () => { 
 
@@ -64,6 +70,28 @@ const WalletContextProvider = ({children}) => {
   async function signOut() {
     setSignedIn(false)
   }
+
+  async function mintTheArtOfOri(tokenId) {
+    if (TheArtOfOriContract) { 
+      const price = tokenPrice
+      const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
+      console.log("estimated gas",gasAmount)
+
+    //   console.log({from: walletAddress, value: price})
+
+      TheArtOfOriContract.methods
+            .mint(tokenId)
+            .send({from: walletAddress, value: price, gas: String(gasAmount)})
+            .on('transactionHash', function(hash){
+              console.log("transactionHash", hash)
+            })
+          
+    } else {
+        console.log("Wallet not connected")
+    }
+    
+  };
+
   
   
   async function callContractData(wallet) {
@@ -84,26 +112,27 @@ const WalletContextProvider = ({children}) => {
     // const currentSupply = await TheArtOfOriContract.methods.currentSupply(1).call() 
     // console.log("===currentSupply===", currentSupply)
 
-    // const currentTokenCount = await TheArtOfOriContract.methods.currentTokenCount().call() 
-    // console.log("===currentTokenCount===", currentTokenCount)
+    const currentTokenCount = await TheArtOfOriContract.methods.currentTokenCount().call() 
+    setCurrentTokenCount(currentTokenCount)
+    console.log("===currentTokenCount===", currentTokenCount)
 
-    // const MAX_TOKEN = await TheArtOfOriContract.methods.MAX_TOKEN().call() 
-    // console.log("===MAX_TOKEN===", MAX_TOKEN)
+    const MAX_TOKEN = await TheArtOfOriContract.methods.MAX_TOKEN().call() 
+    setMaxTokenCount(MAX_TOKEN)
   
     // const EACH_TOKEN_SUPPLY = await TheArtOfOriContract.methods.EACH_TOKEN_SUPPLY().call() 
     // console.log("===EACH_TOKEN_SUPPLY===", EACH_TOKEN_SUPPLY)
     
-    // const name = await TheArtOfOriContract.methods.name().call() 
-    // console.log("===name===", name)
+    const name = await TheArtOfOriContract.methods.name().call() 
+    setTokenName(name)
     
-    // const symbol = await TheArtOfOriContract.methods.symbol().call() 
-    // console.log("===name===", symbol)
+    const symbol = await TheArtOfOriContract.methods.symbol().call() 
+    setTokenSymbol(symbol)
     
-    // const owner = await TheArtOfOriContract.methods.owner().call() 
-    // console.log("===owner===", owner)
+    const owner = await TheArtOfOriContract.methods.owner().call() 
+    setTokenOwner(owner)
    
-    // const uri = await TheArtOfOriContract.methods.uri(11).call() 
-    // console.log("===uri===", uri)
+    const uri = await TheArtOfOriContract.methods.uri(11).call() 
+    setTokenUri(uri)
   }
 
   
@@ -120,7 +149,13 @@ const WalletContextProvider = ({children}) => {
                 totalSupply,
                 setTotalSupply,
                 tokenPrice,
-                setTokenPrice
+                setTokenPrice,
+                tokenName,
+                tokenSymbol,
+                tokenOwner,
+                tokenUri,
+                currentTokenCount,
+                maxTokenCount
             }}
         >
             {children}

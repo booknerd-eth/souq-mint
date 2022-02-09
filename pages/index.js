@@ -20,6 +20,10 @@ export default function Home() {
   if(signedIn == true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
   }  
+  
+  useEffect(() => {
+    setModalShow(false);
+  },[signedIn]);
  
   return (
     <div className="w-full h-screen min-h-screen bg-main-page-pattern bg-cover bg-center bg-no-repeat">
@@ -52,7 +56,7 @@ export default function Home() {
               CONNECT WALLET
             </a>        
             :
-            <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6">
+            <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => setModalShow(true)}>
               {reduceWallet}
             </a>                 
           }   
