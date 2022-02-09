@@ -105,7 +105,7 @@ const WalletContextProvider = ({children}) => {
         const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
         console.log("estimated gas",gasAmount)
 
-        //   console.log({from: walletAddress, value: price})
+          console.log({from: walletAddress, value: price})
 
           TheArtOfOriContract.methods
                 .mint(tokenId)
@@ -121,6 +121,25 @@ const WalletContextProvider = ({children}) => {
     }
   };
 
+  const withdraw = async () => {
+    if (!window.web3) {
+        return false
+    }
+    try {
+        let gasFee = await TheArtOfOriContract.methods.withdraw().estimateGas({
+            from: walletAddress, 
+        });
+        let result = await TheArtOfOriContract.methods.withdraw().send({
+            from: walletAddress,
+            gas: gasFee
+        });
+        return result;
+    } catch(e) {
+        console.log(e)
+        return false
+    }
+  }
+
   
   
   async function callContractData(wallet) {
@@ -130,7 +149,7 @@ const WalletContextProvider = ({children}) => {
     const totalSupply = await myTheArtOfOriContract.methods.totalSupply().call() 
     setTotalSupply(totalSupply)
     console.log("===total supply===", totalSupply)
-
+    
     const tokenPrice = await myTheArtOfOriContract.methods.tokenPrice().call() 
     setTokenPrice(tokenPrice)
     console.log("===tokenPrice===", tokenPrice)
@@ -158,7 +177,8 @@ const WalletContextProvider = ({children}) => {
     setTokenSymbol(symbol)
     
     const owner = await myTheArtOfOriContract.methods.owner().call() 
-    setTokenOwner(owner)
+    setTokenOwner(owner.toLowerCase())
+    console.log("+++++++++++", owner.toLowerCase())
    
     const uri = await myTheArtOfOriContract.methods.uri(11).call() 
     setTokenUri(uri)
@@ -185,7 +205,8 @@ const WalletContextProvider = ({children}) => {
                 tokenUri,
                 currentTokenCount,
                 maxTokenCount,
-                mintTheArtOfOri
+                mintTheArtOfOri,
+                withdraw
             }}
         >
             {children}

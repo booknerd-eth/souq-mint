@@ -18,7 +18,8 @@ export default function Mint() {
 
   const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
           totalSupply, setTotalSupply, tokenPrice, setTokenPrice,  tokenName,
-          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri } = React.useContext(WalletContext);
+          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri, withdraw 
+        } = React.useContext(WalletContext);
   
   if(signedIn === true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
@@ -96,6 +97,15 @@ export default function Mint() {
               Mint Card
             </button>       
           </>
+        }
+
+        { signedIn === true  && tokenOwner === walletAddress ?
+          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => withdraw()}>
+            Withdraw
+          </button>  
+          :
+          <>
+          </> 
         }
 
       </main> 
