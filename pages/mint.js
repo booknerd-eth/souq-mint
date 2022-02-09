@@ -52,7 +52,7 @@ export default function Mint() {
         <Link href="/" className=""><img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
-            MINT YOUR BADGE
+            MINT YOUR CARD
           </Link>
           { signedIn != true ?
             <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
@@ -72,7 +72,7 @@ export default function Mint() {
       </div>  
       <main>
         <h1 className="text-3xl md:text-4xl custom-text">
-          MINT YOUR BADGE
+          MINT YOUR CARD
         </h1>        
         <div style={{ width: 320, height: '' }}>
           <Ratio aspectRatio="1x1">
@@ -89,7 +89,7 @@ export default function Mint() {
           <>
             <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
             <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5">
-              Mint Badge
+              Mint Card
             </button>       
           </>
         }

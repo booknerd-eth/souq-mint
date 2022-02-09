@@ -49,7 +49,7 @@ export default function Home() {
         <Link href="/" className=""><img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
-            MINT YOUR BADGE
+            MINT YOUR CARD
           </Link>             
           { signedIn != true ?
             <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
