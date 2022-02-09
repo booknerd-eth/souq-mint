@@ -45,7 +45,7 @@ const WalletContextProvider = ({children}) => {
             .then((network) => {
                 console.log(network);
                 if(network != "main"){
-                alert("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
+                  alert("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
                 } 
             }).catch(function (err) {
                 console.log(err)
@@ -67,44 +67,73 @@ const WalletContextProvider = ({children}) => {
 
   }
 
+  
+
+
   async function signOut() {
     setSignedIn(false)
   }
 
-  async function mintTheArtOfOri(tokenId) {
+  
+ const getWalletBalance = async (address) => {
+    if (!window.web3) {
+        return
+    }
+    if (address !== "") {
+        console.log("=getBalance=", await window.web3.eth.getBalance(address))
+        console.log("=getNetworkType", await window.web3.eth.net.getNetworkType())
+        return Number.parseFloat(window.web3.utils.fromWei(await window.web3.eth.getBalance(address), 'ether')).toFixed(6)
+    } else {
+        return 0
+    }
+  }
+
+  async function mintTheArtOfOri() {
+      const walletBalance = await getWalletBalance(walletAddress);
+     console.log("============walletBalance==========", walletBalance)
     if (TheArtOfOriContract) { 
+      const tokenId = 1;
+      
+      tokenId = (totalSupply + 1)  % 400; 
+      tokenSupplyById = await TheArtOfOriContract.methods.currentSupply(tokenId).call() 
+      if(tokenSupplyById == 10) return
+      
       const price = tokenPrice
-      const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
-      console.log("estimated gas",gasAmount)
+      console.log(price)
 
-    //   console.log({from: walletAddress, value: price})
+      if(walletBalance >= price){
+        const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
+        console.log("estimated gas",gasAmount)
 
-      TheArtOfOriContract.methods
-            .mint(tokenId)
-            .send({from: walletAddress, value: price, gas: String(gasAmount)})
-            .on('transactionHash', function(hash){
-              console.log("transactionHash", hash)
-            })
-          
+        //   console.log({from: walletAddress, value: price})
+
+          TheArtOfOriContract.methods
+                .mint(tokenId)
+                .send({from: walletAddress, value: price, gas: String(gasAmount)})
+                .on('transactionHash', function(hash){
+                  console.log("transactionHash", hash)
+                })
+      }else{
+        alert("The your balance is lower, the price of this token is 2 ether.")
+      }      
     } else {
         console.log("Wallet not connected")
     }
-    
   };
 
   
   
   async function callContractData(wallet) {
-    const TheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
-    setTheArtOfOriContract(TheArtOfOriContract)
+    const myTheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
+    setTheArtOfOriContract(myTheArtOfOriContract)
 
-    const totalSupply = await TheArtOfOriContract.methods.totalSupply().call() 
+    const totalSupply = await myTheArtOfOriContract.methods.totalSupply().call() 
     setTotalSupply(totalSupply)
     console.log("===total supply===", totalSupply)
 
-    // const tokenPrice = await TheArtOfOriContract.methods.tokenPrice().call() 
-    // setTokenPrice(tokenPrice)
-    // console.log("===tokenPrice===", tokenPrice)
+    const tokenPrice = await myTheArtOfOriContract.methods.tokenPrice().call() 
+    setTokenPrice(tokenPrice)
+    console.log("===tokenPrice===", tokenPrice)
 
     // const baseURI = await TheArtOfOriContract.methods.baseURI().call() 
     // console.log("===baseURI===", baseURI)
@@ -112,26 +141,26 @@ const WalletContextProvider = ({children}) => {
     // const currentSupply = await TheArtOfOriContract.methods.currentSupply(1).call() 
     // console.log("===currentSupply===", currentSupply)
 
-    const currentTokenCount = await TheArtOfOriContract.methods.currentTokenCount().call() 
+    const currentTokenCount = await myTheArtOfOriContract.methods.currentTokenCount().call() 
     setCurrentTokenCount(currentTokenCount)
     console.log("===currentTokenCount===", currentTokenCount)
 
-    const MAX_TOKEN = await TheArtOfOriContract.methods.MAX_TOKEN().call() 
+    const MAX_TOKEN = await myTheArtOfOriContract.methods.MAX_TOKEN().call() 
     setMaxTokenCount(MAX_TOKEN)
   
-    // const EACH_TOKEN_SUPPLY = await TheArtOfOriContract.methods.EACH_TOKEN_SUPPLY().call() 
+    // const EACH_TOKEN_SUPPLY = await myTheArtOfOriContract.methods.EACH_TOKEN_SUPPLY().call() 
     // console.log("===EACH_TOKEN_SUPPLY===", EACH_TOKEN_SUPPLY)
     
-    const name = await TheArtOfOriContract.methods.name().call() 
+    const name = await myTheArtOfOriContract.methods.name().call() 
     setTokenName(name)
     
-    const symbol = await TheArtOfOriContract.methods.symbol().call() 
+    const symbol = await myTheArtOfOriContract.methods.symbol().call() 
     setTokenSymbol(symbol)
     
-    const owner = await TheArtOfOriContract.methods.owner().call() 
+    const owner = await myTheArtOfOriContract.methods.owner().call() 
     setTokenOwner(owner)
    
-    const uri = await TheArtOfOriContract.methods.uri(11).call() 
+    const uri = await myTheArtOfOriContract.methods.uri(11).call() 
     setTokenUri(uri)
   }
 
@@ -155,7 +184,8 @@ const WalletContextProvider = ({children}) => {
                 tokenOwner,
                 tokenUri,
                 currentTokenCount,
-                maxTokenCount
+                maxTokenCount,
+                mintTheArtOfOri
             }}
         >
             {children}

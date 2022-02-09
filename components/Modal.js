@@ -3,12 +3,8 @@ import ReactDOM from "react-dom";
 import styled from "styled-components";
 import { Modal, Button, Accordion } from 'react-bootstrap';
 
-const ModalConnectWallet = (props) => {
-  // if(props.signedIn == true) {
-  //   const element = <>alert("this is already connected")</>
-  //   return(<>element</>)
-  // }else{
-    console.log('false')
+const ModalConnectWallet = ({ signin, signedin ,...props}) => {
+
     return( <Modal
             {...props}
             size="md"
@@ -68,13 +64,13 @@ const ModalConnectWallet = (props) => {
             </Modal.Header>
             <Modal.Body>
               <h5>Please select a wallet to connect to this dapp</h5>
-              { props.signedin != true ?
-                <button type="button" onClick={props.signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3">
+              { signedin !== true ?
+                <button type="button" onClick={signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3">
                   <img src="./images/metamask.png" className="mx-3" width="30"/>
                   MetaMask
                 </button>     
                 :
-                <button type="button" onClick={props.signin} className="rounded-full w-full text-xl bg-gray-300 shadow-lg shadow-cyan-500/50 border-2 border-gray-300 flex items-center p-3 my-3">
+                <button type="button" onClick={signin} className="rounded-full w-full text-xl bg-gray-300 shadow-lg shadow-cyan-500/50 border-2 border-gray-300 flex items-center p-3 my-3">
                   <img src="./images/metamask.png" className="mx-3" width="30"/>
                   MetaMask
                   <span className="flex w-full justify-end italic text-sm pr-3">
@@ -94,10 +90,7 @@ const ModalConnectWallet = (props) => {
               {/* <Button onClick={props.onHide}>Close</Button> */}
             </Modal.Footer>
           </Modal>
-    )
-  // }
-
-   
+    )   
 };
  
     

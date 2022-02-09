@@ -18,15 +18,17 @@ export default function Mint() {
 
   const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
           totalSupply, setTotalSupply, tokenPrice, setTokenPrice,  tokenName,
-          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount } = React.useContext(WalletContext);
+          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri } = React.useContext(WalletContext);
   
-  if(signedIn == true){
+  if(signedIn === true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
   }  
 
   useEffect(() => {
     setModalShow(false);
   },[signedIn]);
+
+  
   
   return (
     <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
@@ -49,12 +51,14 @@ export default function Mint() {
         <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
       </Head> 
       <div className="flex items-center custom-text justify-between w-full p-3">
-        <Link href="/" className=""><img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
+        <Link href="/" className="">
+          <img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" />
+        </Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
             MINT YOUR CARD
           </Link>
-          { signedIn != true ?
+          { signedIn !== true ?
             <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6"  onClick={() => setModalShow(true)}>
               CONNECT WALLET
             </a>        
@@ -81,14 +85,14 @@ export default function Mint() {
             </video>               
           </Ratio> 
         </div>    
-        { signedIn != true ?
+        { signedIn !== true ?
           <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
             Connect Wallet
           </button>  
          :
           <>
             <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
-            <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5">
+            <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => mintTheArtOfOri()}>
               Mint Card
             </button>       
           </>
