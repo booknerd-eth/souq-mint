@@ -149,7 +149,7 @@ const WalletContextProvider = ({children}) => {
     const totalSupply = await myTheArtOfOriContract.methods.totalSupply().call() 
     setTotalSupply(totalSupply)
     console.log("===total supply===", totalSupply)
-    
+
     const tokenPrice = await myTheArtOfOriContract.methods.tokenPrice().call() 
     setTokenPrice(tokenPrice)
     console.log("===tokenPrice===", tokenPrice)
@@ -178,7 +178,7 @@ const WalletContextProvider = ({children}) => {
     
     const owner = await myTheArtOfOriContract.methods.owner().call() 
     setTokenOwner(owner.toLowerCase())
-    console.log("+++++++++++", owner.toLowerCase())
+    console.log("+++++= owner =++++++", owner.toLowerCase())
    
     const uri = await myTheArtOfOriContract.methods.uri(11).call() 
     setTokenUri(uri)
