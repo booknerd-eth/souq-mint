@@ -4,7 +4,8 @@ import { Link } from '@components/Link'
 import Header from '@components/Header'
 import Footer from '@components/Footer'
 import ModalConnectWallet from '@components/Modal'
-import { Button, Ratio } from "react-bootstrap";
+import { Button, Ratio, Toast, Row, Col, ToastContainer } from "react-bootstrap";
+import Swal from 'sweetalert'
 
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
@@ -12,11 +13,14 @@ import Web3 from "web3";
 import {ADDRESS, ABI} from "../config.js"
 
 import { WalletContext } from '../context/Web3Context';
+import swal from 'sweetalert';
 
 export default function Mint() {
   const [modalShow, setModalShow] = useState(false);
 
-  const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
+  const [showToast, setShowToast] = useState(false);
+
+  const { walletAddress, network, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
           totalSupply, setTotalSupply, tokenPrice, setTokenPrice,  tokenName,
           tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri, withdraw 
         } = React.useContext(WalletContext);
@@ -26,10 +30,15 @@ export default function Mint() {
   }  
 
   useEffect(() => {
-    setModalShow(false);
+    setModalShow(false);   
   },[signedIn]);
-
   
+  useEffect(() => {
+    // if(network === "main" && network != null){
+    //   setShowToast(true)
+    // }
+  },[network]);
+
   
   return (
     <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
@@ -107,7 +116,21 @@ export default function Mint() {
           <>
           </> 
         }
-
+        <ToastContainer className="p-3" position="top-end">         
+          <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide>
+            <Toast.Header>
+              <img
+                src="/logo_ori.png"
+                className="rounded me-2"
+                width="30"
+                alt=""
+              />
+              <strong className="me-auto">TheArtOfOri</strong>
+            </Toast.Header>
+            <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
+          </Toast>
+        </ToastContainer> 
+       
       </main> 
       <Footer />
      <ModalConnectWallet
@@ -116,6 +139,7 @@ export default function Mint() {
         signin={signIn}
         signedin={signedIn}
       />
+    
      </div>
   )
 }

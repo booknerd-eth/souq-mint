@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import Toast from 'react-bootstrap/Toast'
+import Swal from 'sweetalert'
 
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
@@ -8,11 +10,13 @@ import {ADDRESS, ABI} from "../config.js"
 export const WalletContext = React.createContext({});
 
 const WalletContextProvider = ({children}) => {
-   
+
   // FOR WALLET
   const [signedIn, setSignedIn] = useState(false)
 
   const [walletAddress, setWalletAddress] = useState(null)
+
+  const [network, setNetwork] = useState(null)
 
   // FOR MINTING
   const [TheArtOfOriContract, setTheArtOfOriContract] = useState(null)
@@ -44,12 +48,16 @@ const WalletContextProvider = ({children}) => {
             // checks if connected network is mainnet (change this to rinkeby if you wanna test on testnet)
             .then((network) => {
                 console.log(network);
+                setNetwork(network)
                 if(network != "main"){
-                  alert("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
+                  setNetwork(network)
+                  Swal("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
+                  // alert("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
                 } 
             }).catch(function (err) {
                 console.log(err)
             });  
+
             let wallet = accounts[0]
             setWalletAddress(wallet)
             setSignedIn(true)
@@ -62,7 +70,13 @@ const WalletContextProvider = ({children}) => {
         })
      
     } else {
-      alert("No Ethereum interface injected into browser. Read-only access");
+      // alert("No Ethereum interface injected into browser. Read-only access");
+      swal({
+        title: "Error",
+        text: "No Ethereum interface injected into browser. Read-only access",
+        icon: "waring",
+        button: "OK",
+      });
     }
 
   }
@@ -112,12 +126,31 @@ const WalletContextProvider = ({children}) => {
                 .send({from: walletAddress, value: price, gas: String(gasAmount)})
                 .on('transactionHash', function(hash){
                   console.log("transactionHash", hash)
+                  swal({
+                    title: "Success!",
+                    text: "Mint success!",
+                    icon: "success",
+                    button: "Ok",
+                  });
                 })
       }else{
-        alert("The your balance is lower, the price of this token is 2 ether.")
+        swal({
+          title: "Mint Error",
+          text: "The your balance is lower, the price of this token is 2 ether.",
+          icon: "warning",
+          // buttons: true,
+          dangerMode: true,
+        })
       }      
     } else {
-        console.log("Wallet not connected")
+        console.log("Contract not connected")        
+        swal({
+          title: "Connect Error",
+          text: "Contract not connected.",
+          icon: "warning",
+          // buttons: true,
+          dangerMode: true,
+        })
     }
   };
 
@@ -145,7 +178,7 @@ const WalletContextProvider = ({children}) => {
   async function callContractData(wallet) {
     const myTheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
     setTheArtOfOriContract(myTheArtOfOriContract)
-
+        
     const totalSupply = await myTheArtOfOriContract.methods.totalSupply().call() 
     setTotalSupply(totalSupply)
     console.log("===total supply===", totalSupply)
@@ -189,6 +222,7 @@ const WalletContextProvider = ({children}) => {
         <WalletContext.Provider
             value={{
                 walletAddress,
+                network,
                 TheArtOfOriContract,
                 // getValue,
                 signIn,

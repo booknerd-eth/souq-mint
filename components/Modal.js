@@ -17,7 +17,7 @@ const ModalConnectWallet = ({ signin, signedin ,...props}) => {
                 <div className="flex items-center justify-between">
                   <div className="rounded-full bg-gray-300 flex p-2 mr-3"> 
                     <svg height="18" viewBox="0 0 19 18" width="19" xmlns="http://www.w3.org/2000/svg">
-                      <g fill="currentColor" fill-rule="evenodd">
+                      <g fill="currentColor" fillRule="evenodd">
                         <path d="m15.7721618.00006623h-13.27469839c-.86762065
                           0-1.48592681.3078086-1.89741046.76113193-.40615823.44745064-.60839063
                           1.04661988-.59978974

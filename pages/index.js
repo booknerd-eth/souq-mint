@@ -15,7 +15,7 @@ import { WalletContext } from '../context/Web3Context';
 export default function Home() {
   const [modalShow, setModalShow] = useState(false);
 
-  const { walletAddress, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, totalSupply, setTotalSupply, tokenPrice, setTokenPrice } = React.useContext(WalletContext);
+  const { walletAddress, network, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, totalSupply, setTotalSupply, tokenPrice, setTokenPrice } = React.useContext(WalletContext);
   
   if(signedIn == true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
@@ -63,7 +63,7 @@ export default function Home() {
         </nav>
       </div> 
       <main>
-        <img src="./images/logo_ori.png" class="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="320" style={{maxWidth:320}} />
+        <img src="./images/logo_ori.png" className="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="320" style={{maxWidth:320}} />
       </main> 
       <Footer />
      <ModalConnectWallet
