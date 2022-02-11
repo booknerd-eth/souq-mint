@@ -74,7 +74,7 @@ const WalletContextProvider = ({children}) => {
       swal({
         title: "Error",
         text: "No Ethereum interface injected into browser. Read-only access",
-        icon: "waring",
+        icon: "warning",
         button: "OK",
       });
     }
