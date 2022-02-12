@@ -22,7 +22,7 @@ export default function Mint() {
 
   const { walletAddress, network, TheArtOfOriContract, signIn, signOut, signedIn, setSignedIn, 
           totalSupply, setTotalSupply, tokenPrice, setTokenPrice,  tokenName,
-          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri, withdraw 
+          tokenSymbol, tokenOwner, tokenUri, currentTokenCount, maxTokenCount, mintTheArtOfOri, withdraw, mintStart 
         } = React.useContext(WalletContext);
   
   if(signedIn === true){
@@ -48,12 +48,22 @@ export default function Mint() {
                           Connect Wallet
                       </button>
     } else if (signedIn === true && maxTokenCount > 0) {
-      buttonContent =  <>            
+      if (mintStart == false){
+          buttonContent =  <>            
                           <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
                           <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => mintTheArtOfOri()}>
                             Mint Card
                           </button>       
                         </>
+      } else {
+        buttonContent =  <>            
+                            <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
+                            <button type="button" className="btn-mint flex text-xl md:text-2xl m-3 p-3 md:p-5">
+                              <span className="pr-3">Processing</span> 
+                              <img src="images/loading.gif" width="30" />
+                            </button>       
+                          </>
+      }
     } else {      
       buttonContent = <button type="button" className="btn-mint flex text-xl md:text-2xl m-3 p-3 md:p-5">
                          <span className="pr-3">Connecting</span> 
@@ -103,6 +113,14 @@ export default function Mint() {
               </a>                             
             </>
           }
+          { signedIn === true  && tokenOwner === walletAddress ?
+            <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => withdraw()}>
+              Withdraw
+            </a>  
+            :
+            <>
+            </> 
+        }
         </nav>
       </div>  
       <main>
@@ -117,14 +135,14 @@ export default function Mint() {
           </Ratio> 
         </div>  
         { buttonContent }
-        { signedIn === true  && tokenOwner === walletAddress ?
+        {/* { signedIn === true  && tokenOwner === walletAddress ?
           <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => withdraw()}>
             Withdraw
           </button>  
           :
           <>
           </> 
-        }
+        } */}
         <ToastContainer className="p-3" position="top-end">         
           <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide>
             <Toast.Header>

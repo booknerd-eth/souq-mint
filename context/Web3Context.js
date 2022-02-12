@@ -6,6 +6,7 @@ import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
 
 import {ADDRESS, ABI} from "../config.js"
+import swal from 'sweetalert';
 
 export const WalletContext = React.createContext({});
 
@@ -20,6 +21,8 @@ const WalletContextProvider = ({children}) => {
 
   // FOR MINTING
   const [TheArtOfOriContract, setTheArtOfOriContract] = useState(null)
+  const [mintResult, setMintResult] = useState(false)
+  const [mintStart, setMintStart] = useState(false)
 
   // INFO FROM SMART Contract
   const [totalSupply, setTotalSupply] = useState(0)
@@ -36,6 +39,18 @@ const WalletContextProvider = ({children}) => {
     // signOut()
 
   }, [signedIn])
+  
+  useEffect( () => { 
+    
+    console.log("==========update========")
+    if(signedIn == true){
+      console.log("==========update123========")
+      callContractData(walletAddress)
+      setMintResult(false)
+      setMintStart(false)
+    }
+    
+  }, [mintResult])
 
   async function signIn() {
     if (typeof window.web3 !== 'undefined') {
@@ -104,6 +119,17 @@ const WalletContextProvider = ({children}) => {
   async function mintTheArtOfOri() {
       const walletBalance = await getWalletBalance(walletAddress);
      console.log("============walletBalance==========", walletBalance)
+
+    if(network != "main"){
+      swal({
+        title: "Mint Error",
+        text: "You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here",
+        icon: "warning",
+        // buttons: true,
+        dangerMode: true,
+      })
+      return                 
+    } 
     if (TheArtOfOriContract) { 
       const tokenId = 1;
       
@@ -119,6 +145,8 @@ const WalletContextProvider = ({children}) => {
       console.log("tokenPrice_wei=", WalletBalanceWei)
 
       if(WalletBalanceWei >= price){
+        setMintStart(true)
+
         const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
         console.log("estimated gas",gasAmount)
 
@@ -129,7 +157,10 @@ const WalletContextProvider = ({children}) => {
                 .send({from: walletAddress, value: price, gas: String(gasAmount)})
                 .on('transactionHash', function(hash){
                   console.log("transactionHash", hash)
-                 
+                  setMintResult(true)
+
+                  console.log("====mintresult ===", mintResult);
+                  
                   swal({
                     title: "Success!",
                     text: "Mint success!",
@@ -138,9 +169,7 @@ const WalletContextProvider = ({children}) => {
                   });
                 })
 
-          const total_Supply = await TheArtOfOriContract.methods.totalSupply().call() 
-          setTotalSupply(total_Supply)
-          console.log("=== after mint total supply ===", total_Supply)
+          
       }else{
         swal({
           title: "Mint Error",
@@ -167,6 +196,8 @@ const WalletContextProvider = ({children}) => {
         return false
     }
     try {
+      let balanceOfContract = await web3.eth.getBalance(ADDRESS)
+      if( balanceOfContract > 0){
         let gasFee = await TheArtOfOriContract.methods.withdraw().estimateGas({
             from: walletAddress, 
         });
@@ -175,13 +206,20 @@ const WalletContextProvider = ({children}) => {
             gas: gasFee
         });
         return result;
+      } else {
+        swal({
+          title: "Please withdraw after",
+          text: "The balance of this contract is 0.",
+          icon: "warning",
+          // buttons: true,
+          dangerMode: true,
+        })
+      }
     } catch(e) {
         console.log(e)
         return false
     }
   }
-
-  
   
   async function callContractData(wallet) {
     const myTheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
@@ -189,7 +227,7 @@ const WalletContextProvider = ({children}) => {
         
     const total_Supply = await myTheArtOfOriContract.methods.totalSupply().call() 
     setTotalSupply(total_Supply)
-    console.log("===total su546464pply===", totalSupply)
+    console.log("===total supply===", totalSupply)
 
     const token_Price = await myTheArtOfOriContract.methods.tokenPrice().call() 
     setTokenPrice(token_Price)
@@ -251,7 +289,8 @@ const WalletContextProvider = ({children}) => {
                 currentTokenCount,
                 maxTokenCount,
                 mintTheArtOfOri,
-                withdraw
+                withdraw,
+                mintStart
             }}
         >
             {children}
