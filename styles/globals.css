@@ -49,7 +49,7 @@
   font-feature-settings: "kern";
   text-transform: uppercase;
   text-align: center;
-  /* font-weight: bold; */
+  font-weight: bold;
   /* padding: 15vh 20px 20px; */
   -webkit-box-align: center;
   align-items: center;
