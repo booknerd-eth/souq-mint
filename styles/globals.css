@@ -26,7 +26,7 @@
 @font-face {
   font-family: 'FjallaOne';
   src: url('../fonts/FjallaOne-Regular.ttf');
-  font-weight: 400;
+  font-weight: 100;
   font-style: normal;
 }
 
@@ -49,7 +49,7 @@
   font-feature-settings: "kern";
   text-transform: uppercase;
   text-align: center;
-  font-weight: bold;
+  /* font-weight: bold; */
   /* padding: 15vh 20px 20px; */
   -webkit-box-align: center;
   align-items: center;
@@ -60,7 +60,7 @@
 }
 
 .btn-mint {
-  font-family: Playball, sans-serif;
+  font-family: FjallaOne, sans-serif;
   cursor: pointer;
   transition: all 0.5s ease-in-out 0s;
   letter-spacing: 0.16em;
@@ -81,7 +81,7 @@
 }
 
 .custom-menu {
-  font-family: FjallaOne, sans-serif;
+  font-family: Playball, sans-serif;
   text-decoration-line: none !important;
   cursor: pointer
 }
@@ -94,9 +94,8 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: "Good Times", "Microsoft JhengHei", sans-serif !important;
-  /* font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
-    Fira Sans, Droid Sans, Helvetica Neue, sans-serif; */
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell,
+    Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 * {

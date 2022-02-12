@@ -179,13 +179,13 @@ const WalletContextProvider = ({children}) => {
     const myTheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
     setTheArtOfOriContract(myTheArtOfOriContract)
         
-    const totalSupply = await myTheArtOfOriContract.methods.totalSupply().call() 
-    setTotalSupply(totalSupply)
-    console.log("===total supply===", totalSupply)
+    const total_Supply = await myTheArtOfOriContract.methods.totalSupply().call() 
+    setTotalSupply(total_Supply)
+    console.log("===total su546464pply===", totalSupply)
 
-    const tokenPrice = await myTheArtOfOriContract.methods.tokenPrice().call() 
-    setTokenPrice(tokenPrice)
-    console.log("===tokenPrice===", tokenPrice)
+    const token_Price = await myTheArtOfOriContract.methods.tokenPrice().call() 
+    setTokenPrice(token_Price)
+    console.log("===tokenPrice===", token_Price)
 
     // const baseURI = await TheArtOfOriContract.methods.baseURI().call() 
     // console.log("===baseURI===", baseURI)
@@ -193,12 +193,15 @@ const WalletContextProvider = ({children}) => {
     // const currentSupply = await TheArtOfOriContract.methods.currentSupply(1).call() 
     // console.log("===currentSupply===", currentSupply)
 
-    const currentTokenCount = await myTheArtOfOriContract.methods.currentTokenCount().call() 
-    setCurrentTokenCount(currentTokenCount)
+    const current_TokenCount = await myTheArtOfOriContract.methods.currentTokenCount().call() 
+    setCurrentTokenCount(current_TokenCount)
     console.log("===currentTokenCount===", currentTokenCount)
 
     const MAX_TOKEN = await myTheArtOfOriContract.methods.MAX_TOKEN().call() 
     setMaxTokenCount(MAX_TOKEN)
+    console.log("===max_token===", MAX_TOKEN)
+    console.log("===max_token===", maxTokenCount)
+
   
     // const EACH_TOKEN_SUPPLY = await myTheArtOfOriContract.methods.EACH_TOKEN_SUPPLY().call() 
     // console.log("===EACH_TOKEN_SUPPLY===", EACH_TOKEN_SUPPLY)
