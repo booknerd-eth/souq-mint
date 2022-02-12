@@ -72,13 +72,12 @@ const WalletContextProvider = ({children}) => {
     } else {
       // alert("No Ethereum interface injected into browser. Read-only access");
       swal({
-        title: "Error",
+        title: "Please install metamask!",
         text: "No Ethereum interface injected into browser. Read-only access",
         icon: "warning",
         button: "OK",
       });
     }
-
   }
 
   
@@ -109,13 +108,17 @@ const WalletContextProvider = ({children}) => {
       const tokenId = 1;
       
       tokenId = (totalSupply + 1)  % 400; 
-      tokenSupplyById = await TheArtOfOriContract.methods.currentSupply(tokenId).call() 
+      const tokenSupplyById = await TheArtOfOriContract.methods.currentSupply(tokenId).call() 
       if(tokenSupplyById == 10) return
       
       const price = tokenPrice
-      console.log(price)
+      console.log("tokenPrice=", price)
 
-      if(walletBalance >= price){
+      let WalletBalanceWei = window.web3.utils.toWei(`${walletBalance}`, "ether")
+  
+      console.log("tokenPrice_wei=", WalletBalanceWei)
+
+      if(WalletBalanceWei >= price){
         const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
         console.log("estimated gas",gasAmount)
 
@@ -126,6 +129,7 @@ const WalletContextProvider = ({children}) => {
                 .send({from: walletAddress, value: price, gas: String(gasAmount)})
                 .on('transactionHash', function(hash){
                   console.log("transactionHash", hash)
+                 
                   swal({
                     title: "Success!",
                     text: "Mint success!",
@@ -133,6 +137,10 @@ const WalletContextProvider = ({children}) => {
                     button: "Ok",
                   });
                 })
+
+          const total_Supply = await TheArtOfOriContract.methods.totalSupply().call() 
+          setTotalSupply(total_Supply)
+          console.log("=== after mint total supply ===", total_Supply)
       }else{
         swal({
           title: "Mint Error",

@@ -29,6 +29,7 @@ export default function Mint() {
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
   }  
 
+  console.log("=== Max token count ===",maxTokenCount);
   useEffect(() => {
     setModalShow(false);   
   },[signedIn]);
@@ -39,6 +40,26 @@ export default function Mint() {
     // }
   },[network]);
 
+
+  let buttonContent;
+
+    if (signedIn !== true ) {
+      buttonContent = <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
+                          Connect Wallet
+                      </button>
+    } else if (signedIn === true && maxTokenCount > 0) {
+      buttonContent =  <>            
+                          <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
+                          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => mintTheArtOfOri()}>
+                            Mint Card
+                          </button>       
+                        </>
+    } else {      
+      buttonContent = <button type="button" className="btn-mint flex text-xl md:text-2xl m-3 p-3 md:p-5">
+                         <span className="pr-3">Connecting</span> 
+                         <img src="images/loading.gif" width="30" />
+                      </button>
+    }
   
   return (
     <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
@@ -94,20 +115,8 @@ export default function Mint() {
               <source src="./images/3278_SQ_Green-V.webm" type="video/mp4"/>
             </video>               
           </Ratio> 
-        </div>    
-        { signedIn !== true ?
-          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => setModalShow(true)}>
-            Connect Wallet
-          </button>  
-         :
-          <>
-            <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">{currentTokenCount} / {maxTokenCount}</span>
-            <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => mintTheArtOfOri()}>
-              Mint Card
-            </button>       
-          </>
-        }
-
+        </div>  
+        { buttonContent }
         { signedIn === true  && tokenOwner === walletAddress ?
           <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => withdraw()}>
             Withdraw
