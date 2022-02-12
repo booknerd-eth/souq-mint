@@ -58,7 +58,7 @@ export default function Mint() {
         <meta property="twitter:url" content="https://mint.theartofori.com/" key="twurl" />
         <meta name="twitter:title" content="TheArtOfOri" key="twtitle" />
         <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
-        <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
+        <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />      
       </Head> 
       <div className="flex items-center custom-text justify-between w-full p-3">
         <Link href="/" className="">

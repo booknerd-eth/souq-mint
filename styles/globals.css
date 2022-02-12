@@ -2,8 +2,50 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Staatliches';
+  src: url('../fonts/Staatliches-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Lobster';
+  src: url('../fonts/Lobster-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ultra';
+  src: url('../fonts/Ultra-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'FjallaOne';
+  src: url('../fonts/FjallaOne-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Shrikhand';
+  src: url('../fonts/Shrikhand-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Playball';
+  src: url('../fonts/Playball-Regular.ttf');
+  font-weight: 400;
+  font-style: normal;
+}
+
 .custom-text{
-  font-family: "Good Times", "Microsoft JhengHei", sans-serif !important;
+  font-family: "Lobster", sans-serif !important;
   font-feature-settings: "kern";
   text-transform: uppercase;
   text-align: center;
@@ -18,6 +60,7 @@
 }
 
 .btn-mint {
+  font-family: Playball, sans-serif;
   cursor: pointer;
   transition: all 0.5s ease-in-out 0s;
   letter-spacing: 0.16em;
@@ -38,6 +81,7 @@
 }
 
 .custom-menu {
+  font-family: FjallaOne, sans-serif;
   text-decoration-line: none !important;
   cursor: pointer
 }
