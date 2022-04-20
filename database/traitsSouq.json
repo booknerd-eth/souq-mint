@@ -1,0 +1,13 @@
+[
+    { 
+        "name": "Souq", 
+        "description": "Souq NFT", 
+        "animation_url": "https://ipfs.io/ipfs/QmdvqSeHHyyVgBnFMFKXbyxiNqd8HNRkdpNK5LUW6Gbhex", 
+        "attributes": [ 
+            {
+                "traite_type": "Animated", 
+                "value": "Yes"
+            }
+        ]
+    }
+]

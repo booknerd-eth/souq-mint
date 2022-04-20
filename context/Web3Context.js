@@ -65,9 +65,8 @@ const WalletContextProvider = ({children}) => {
                 console.log(network);
                 setNetwork(network)
                 if(network != "main"){
-                  setNetwork(network)
-                  Swal("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
-                  // alert("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
+                  // setNetwork(network)
+                  // Swal("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
                 } 
             }).catch(function (err) {
                 console.log(err)
@@ -75,17 +74,41 @@ const WalletContextProvider = ({children}) => {
 
             let wallet = accounts[0]
             setWalletAddress(wallet)
-            setSignedIn(true)
 
-            callContractData(wallet)
+            notify('Wallet connected!', 'success');
+            window.userWalletAddress = userAcc;
+
+
+            // setSignedIn(true)
+
+            // callContractData(wallet)
         })
         .catch(function (error) {
         // Handle error. Likely the user rejected the login
         console.error(error)
         })
+
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const chainNum = parseInt(chainId, 16)
+        if (chainNum === 0x89){
+          // notify('Network: Polygon mainnet', 'success');
+          setSignedIn(true)
+          callContractData(walletAddress)
+          Swal("You are on Polygon mainnet")
+      
+        } else if (chainNum === 0x13881){  //  0x13881 - 80001
+          // notify('Network: Polygon testnet', 'success');
+          Swal("You are on Polygon testnet")
+          setSignedIn(true)
+          callContractData(walletAddress)
+        } else {
+          // notify('Please connect Polygon network', 'error');
+          Swal("Please connect Polygon network")
+        }
+        console.log('network id --- ', chainId)    
+      
      
     } else {
-      // alert("No Ethereum interface injected into browser. Read-only access");
       swal({
         title: "Please install metamask!",
         text: "No Ethereum interface injected into browser. Read-only access",

@@ -1,1 +1,11 @@
-{"name":"TheArtOfOri 2923","description":"Ninja Pirate","animation_url":"https://gateway.pinata.cloud/ipfs/QmU351sjDebgd7HoUiPMogPiRrkUcKKhk5ZV4BkporTehx","attributes":[{"traite_type":"Year","value":9},{"traite_type":"Asset","value":"2923"},{"traite_type":"Size","value":"24x30"},{"traite_type":"Medium","value":"Digital Painting"},{"traite_type":"Subject","value":"Men"},{"traite_type":"Character","value":" "},{"traite_type":"Animated","value":"No"}]}
+{ 
+    "name": "Souq", 
+    "description": "Souq NFT", 
+    "animation_url": "https://ipfs.io/ipfs/QmdvqSeHHyyVgBnFMFKXbyxiNqd8HNRkdpNK5LUW6Gbhex", 
+    "attributes": [ 
+        {
+            "traite_type": "Animated", 
+            "value": "Yes"
+        }
+    ]
+}

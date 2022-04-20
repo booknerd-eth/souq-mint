@@ -26,27 +26,27 @@ export default function Home() {
   },[signedIn]);
  
   return (
-    <div className="w-full h-screen min-h-screen bg-main-page-pattern bg-cover bg-center bg-no-repeat">
+    <div className="w-full h-screen min-h-screen bg-black bg-cover bg-center bg-no-repeat">
       <Head>
-        <title>TheArtOfOri</title>
-        <link rel="icon" href="/logo_ori.png" />
+        <title>Souq</title>
+        <link rel="icon" href="/logo.ico" />
   
-        <meta property="og:title" content="TheArtOfOri" key="ogtitle" />
-        <meta property="og:description" content="Here is mint.theartofori.com." key="ogdesc" />
+        <meta property="og:title" content="souq" key="ogtitle" />
+        <meta property="og:description" content="Here is mint.souq.com." key="ogdesc" />
         <meta property="og:type" content="website" key="ogtype" />
-        <meta property="og:url" content="https://mint.theartofori.com/" key="ogurl"/>
-        <meta property="og:image" content="https:/mint.theartofori.com/images/Hola.gif" key="ogimage"/>
-        <meta property="og:site_name" content="https://mint.theartofori.com/" key="ogsitename" />
+        <meta property="og:url" content="https://mint.souq.com/" key="ogurl"/>
+        <meta property="og:image" content="https:/mint.souq.com/images/Hola.gif" key="ogimage"/>
+        <meta property="og:site_name" content="https://mint.souq.com/" key="ogsitename" />
 
         <meta name="twitter:card" content="summary_large_image" key="twcard"/>
-        <meta property="twitter:domain" content="mint.theartofori.com" key="twdomain" />
-        <meta property="twitter:url" content="https://mint.theartofori.com/" key="twurl" />
-        <meta name="twitter:title" content="TheArtOfOri" key="twtitle" />
-        <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
-        <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />
+        <meta property="twitter:domain" content="mint.souq.com" key="twdomain" />
+        <meta property="twitter:url" content="https://mint.souq.com/" key="twurl" />
+        <meta name="twitter:title" content="Souq" key="twtitle" />
+        <meta name="twitter:description" content="mint.souq.com" key="twdesc" />
+        <meta name="twitter:image" content="https://mint.souq.com/images/Hola.gif" key="twimage" />
       </Head>
       <div className="flex items-center custom-text justify-between w-full p-3">
-        <Link href="/" className=""><img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" /></Link>
+        <Link href="/" className=""><img src="images/logo.png" width="108" alt="Souq" className="logo-image" /></Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
             MINT YOUR CARD
@@ -63,9 +63,9 @@ export default function Home() {
         </nav>
       </div> 
       <main>
-        <img src="./images/logo_ori.png" className="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="320" style={{maxWidth:320}} />
+        <img src="./images/souq-sign.png" className="absolute bottom-1/2 right-1/2 translate-y-1/2 translate-x-1/2" width="640" style={{maxWidth:640}} />
       </main> 
-      <Footer />
+      <Footer page="landing"/>
      <ModalConnectWallet
         show={modalShow}
         onHide={() => setModalShow(false)}

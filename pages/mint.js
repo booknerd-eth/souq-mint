@@ -72,28 +72,29 @@ export default function Mint() {
     }
   
   return (
-    <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
+    // <div className="w-full h-screen min-h-screen bg-mint-page-pattern bg-cover bg-center bg-no-repeat">
+    <div className="w-full bg-cover bg-center bg-no-repeat" style={{"backgroundColor": "#060614"}}>
       <Head>
-        <title>TheArtOfOri</title>
-        <link rel="icon" href="/logo_ori.png" />
+        <title>Souq</title>
+        <link rel="icon" href="/logo.ico" />
   
-        <meta property="og:title" content="TheArtOfOri" key="ogtitle" />
-        <meta property="og:description" content="Here is mint.theartofori.com." key="ogdesc" />
+        <meta property="og:title" content="souq" key="ogtitle" />
+        <meta property="og:description" content="Here is mint.souq.com." key="ogdesc" />
         <meta property="og:type" content="website" key="ogtype" />
-        <meta property="og:url" content="https://mint.theartofori.com/" key="ogurl"/>
-        <meta property="og:image" content="https:/mint.theartofori.com/images/Hola.gif" key="ogimage"/>
-        <meta property="og:site_name" content="https://mint.theartofori.com/" key="ogsitename" />
+        <meta property="og:url" content="https://mint.souq.com/" key="ogurl"/>
+        <meta property="og:image" content="https:/mint.souq.com/images/Hola.gif" key="ogimage"/>
+        <meta property="og:site_name" content="https://mint.souq.com/" key="ogsitename" />
 
         <meta name="twitter:card" content="summary_large_image" key="twcard"/>
-        <meta property="twitter:domain" content="mint.theartofori.com" key="twdomain" />
-        <meta property="twitter:url" content="https://mint.theartofori.com/" key="twurl" />
-        <meta name="twitter:title" content="TheArtOfOri" key="twtitle" />
-        <meta name="twitter:description" content="mint.theartofori.com" key="twdesc" />
-        <meta name="twitter:image" content="https://mint.theartofori.com/images/Hola.gif" key="twimage" />      
+        <meta property="twitter:domain" content="mint.souq.com" key="twdomain" />
+        <meta property="twitter:url" content="https://mint.souq.com/" key="twurl" />
+        <meta name="twitter:title" content="Souq" key="twtitle" />
+        <meta name="twitter:description" content="mint.souq.com" key="twdesc" />
+        <meta name="twitter:image" content="https://mint.souq.com/images/Hola.gif" key="twimage" />      
       </Head> 
       <div className="flex items-center custom-text justify-between w-full p-3">
         <Link href="/" className="">
-          <img src="images/logo_ori.png" width="108" alt="TheArtOfOri" className="logo-image" />
+          <img src="images/logo.png" width="108" alt="Souq" className="logo-image" />
         </Link>
         <nav className="flex flex-wrap flex-row justify-around">
           <Link href="/mint" className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6 hidden md:block">
@@ -113,53 +114,38 @@ export default function Mint() {
               </a>                             
             </>
           }
-          { signedIn === true  && tokenOwner === walletAddress ?
+          { signedIn === true  && tokenOwner === walletAddress && 
             <a className="custom-menu text-white hover:text-slate-100 m-3 sm:m-6" onClick={() => withdraw()}>
               Withdraw
             </a>  
-            :
-            <>
-            </> 
-        }
+          }
         </nav>
       </div>  
       <main>
         <h1 className="text-3xl md:text-4xl custom-text">
           MINT YOUR CARD
         </h1>        
-        <div style={{ width: 320, height: '' }}>
-          <Ratio aspectRatio="1x1">
-            <video width="320" height="320" loop autoPlay muted>
-              <source src="./images/3278_SQ_Green-V.webm" type="video/mp4"/>
-            </video>               
-          </Ratio> 
+        <div style={{ width: 320, height: ''}}>
+          <img  className="rounded-full shadow-lg" src="./images/souq_token.gif"/>
         </div>  
         { buttonContent }
-        {/* { signedIn === true  && tokenOwner === walletAddress ?
-          <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => withdraw()}>
-            Withdraw
-          </button>  
-          :
-          <>
-          </> 
-        } */}
         <ToastContainer className="p-3" position="top-end">         
           <Toast onClose={() => setShowToast(false)} show={showToast} delay={5000} autohide>
             <Toast.Header>
               <img
-                src="/logo_ori.png"
+                src="/logo.png"
                 className="rounded me-2"
                 width="30"
                 alt=""
               />
-              <strong className="me-auto">TheArtOfOri</strong>
+              <strong className="me-auto">Souq</strong>
             </Toast.Header>
             <Toast.Body>Woohoo, you're reading this text in a Toast!</Toast.Body>
           </Toast>
         </ToastContainer> 
        
       </main> 
-      <Footer />
+      <Footer page="mint"/>
      <ModalConnectWallet
         show={modalShow}
         onHide={() => setModalShow(false)}
