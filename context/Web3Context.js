@@ -33,9 +33,6 @@ const WalletContextProvider = ({children}) => {
   const [tokenName, setTokenName] = useState('')
   const [tokenSymbol, setTokenSymbol] = useState('')
   const [tokenOwner, setTokenOwner] = useState('')
-  const [tokenUri, setTokenUri] = useState('')
-  const [maxTokenCount, setMaxTokenCount] = useState(0)
-  const [currentTokenCount, setCurrentTokenCount] = useState(0)
 
   useEffect( () => { 
 
@@ -44,10 +41,7 @@ const WalletContextProvider = ({children}) => {
   }, [signedIn])
   
   useEffect( () => { 
-    
-    console.log("==========update========")
     if(signedIn == true){
-      console.log("==========update123========")
       callContractData(walletAddress)
       setMintResult(false)
       setMintStart(false)
@@ -95,7 +89,6 @@ const WalletContextProvider = ({children}) => {
             window.web3.eth.net.getNetworkType()
             // checks if connected network is mainnet (change this to rinkeby if you wanna test on testnet)
             .then((network) => {
-                console.log(network);
                 setNetwork(network)
                 if(network != "main"){
    
@@ -107,8 +100,8 @@ const WalletContextProvider = ({children}) => {
             let wallet = accounts[0]
             setWalletAddress(wallet)
 
-            notify('Wallet connected!', 'success');
-            window.userWalletAddress = userAcc;
+            // notify('Wallet connected!', 'success');
+            // window.userWalletAddress = userAcc;
         })
         .catch(function (error) {
         // Handle error. Likely the user rejected the login
@@ -131,9 +124,6 @@ const WalletContextProvider = ({children}) => {
         } else {
            switchNetwork()
         }
-        console.log('network id --- ', chainNum)    
-      
-     
     } else {
       swal({
         title: "Please install metamask!",
@@ -143,9 +133,6 @@ const WalletContextProvider = ({children}) => {
       });
     }
   }
-
-  
-
 
   async function signOut() {
     setSignedIn(false)
@@ -157,8 +144,6 @@ const WalletContextProvider = ({children}) => {
         return
     }
     if (address !== "") {
-        console.log("=getBalance=", await window.web3.eth.getBalance(address))
-        console.log("=getNetworkType", await window.web3.eth.net.getNetworkType())
         return Number.parseFloat(window.web3.utils.fromWei(await window.web3.eth.getBalance(address), 'ether')).toFixed(6)
     } else {
         return 0
@@ -177,49 +162,29 @@ const WalletContextProvider = ({children}) => {
       })
       return                 
     } 
-    if (SouqContract) { 
-      // const tokenId = 1;
-      
-      // tokenId = Number(totalSupply) + 1; 
-      
-      // const price = tokenPrice
-      // console.log("tokenPrice=", price)
+    if (SouqContract) {
 
-      // let WalletBalanceWei = window.web3.utils.toWei(`${walletBalance}`, "ether")
-  
-      // console.log("tokenPrice_wei=", WalletBalanceWei)
-
-      const tokenId = Number(totalSupply) + 1; 
       const tokenPriceInEth = window.web3.utils.fromWei(`${tokenPrice}`, "ether");
 
       if(parseFloat(walletBalance) >= parseFloat(tokenPriceInEth)){
-      // if(WalletBalanceWei >= price){
-        setMintStart(true)
-
-        const gasAmount = await SouqContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: tokenPrice})
-        console.log("estimated gas",gasAmount)
-
-          console.log({from: walletAddress, value: tokenPrice})
-
-          SouqContract.methods
-                .mint(tokenId)
-                .send({from: walletAddress, value: tokenPrice, gas: String(gasAmount)})
-                .on('transactionHash', function(hash){
-                  console.log("transactionHash", hash)
-                  setMintResult(true)
-
-                  console.log("====mintresult ===", mintResult);
-                  
-                  swal({
-                    title: "Success!",
-                    text: "Mint success!",
-                    icon: "success",
-                    button: "Ok",
-                  });
-                })
-
-          
-      }else{
+        setMintStart(true);
+        const gasAmount = await SouqContract.methods.buy().estimateGas({from: walletAddress, value: tokenPrice})
+        SouqContract.methods
+          .buy()
+          .send({from: walletAddress, value: tokenPrice, gas: String(gasAmount)})
+          .on('transactionHash', function(hash){
+            setMintResult(true)
+            swal({
+              title: "Success!",
+              text: "Mint success!",
+              icon: "success",
+              button: "Ok",
+            });
+          })
+          .on('error', function(error, receipt) {
+            setMintStart(false);
+          })
+      } else {
         swal({
           title: "Mint Error",
           text: "The your balance is lower, the price of this token is 0.05 Matic.",
@@ -228,7 +193,6 @@ const WalletContextProvider = ({children}) => {
         })
       }      
     } else {
-        console.log("Contract not connected")        
         swal({
           title: "Connect Error",
           text: "Contract not connected.",
@@ -274,20 +238,9 @@ const WalletContextProvider = ({children}) => {
         
     const total_Supply = await mySouqContract.methods.totalSupply().call() 
     setTotalSupply(total_Supply)
-    console.log("===total supply===", totalSupply)
 
     const token_Price = await mySouqContract.methods.tokenPrice().call() 
     setTokenPrice(token_Price)
-    console.log("===tokenPrice===", token_Price)
-
-    const current_TokenCount = await mySouqContract.methods.currentTokenCount().call() 
-    setCurrentTokenCount(current_TokenCount)
-    console.log("===currentTokenCount===", currentTokenCount)
-
-    const MAX_TOKEN = await mySouqContract.methods.MAX_TOKEN().call() 
-    setMaxTokenCount(MAX_TOKEN)
-    console.log("===max_token===", MAX_TOKEN)
-    console.log("===max_token===", maxTokenCount)
 
     const name = await mySouqContract.methods.name().call() 
     setTokenName(name)
@@ -297,9 +250,6 @@ const WalletContextProvider = ({children}) => {
     
     const owner = await mySouqContract.methods.owner().call() 
     setTokenOwner(owner.toLowerCase())
-   
-    const uri = await mySouqContract.methods.uri(11).call() 
-    setTokenUri(uri)
   }
 
   
@@ -322,9 +272,6 @@ const WalletContextProvider = ({children}) => {
                 tokenName,
                 tokenSymbol,
                 tokenOwner,
-                tokenUri,
-                currentTokenCount,
-                maxTokenCount,
                 mintSouq,
                 withdraw,
                 mintStart

@@ -15,15 +15,13 @@ export default function Mint() {
   const [showToast, setShowToast] = useState(false);
 
   const { walletAddress, networkID, SouqContract, signIn, signOut, signedIn, 
-          tokenPrice, tokenOwner, currentTokenCount, maxTokenCount, mintSouq, withdraw, mintStart 
+          tokenPrice, tokenOwner, totalSupply, mintSouq, withdraw, mintStart 
         } = React.useContext(WalletContext);
   
   if(signedIn === true){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
-  }  
+  }
 
-  console.log("=== Max token count ===",maxTokenCount);
-  console.log("=== networkId ===",networkID);
   useEffect(() => {
     setModalShow(false);   
   },[signedIn]);
@@ -38,10 +36,10 @@ export default function Mint() {
                         </button>      
                       </>
      
-    } else if (signedIn === true && maxTokenCount > 0) {
+    } else if (signedIn === true) {
       if (mintStart == false){
           buttonContent =  <>            
-                          <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Minted Count : {currentTokenCount}</span>
+                          <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Minted Count : {totalSupply}</span>
                           <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Price : .05 Matic</span>
                             <button type="button" className="btn-mint text-xl md:text-2xl m-3 p-3 md:p-5" onClick={() => mintSouq()}>
                             Mint Badge
@@ -49,7 +47,7 @@ export default function Mint() {
                         </>
       } else {
         buttonContent =  <>            
-                            <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Minted Count : {currentTokenCount}</span>
+                            <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Minted Count : {totalSupply}</span>
                             <span className="custom-menu text-2xl text-white hover:text-slate-100 m-1">Price : .05 Matic</span>
                             <button type="button" className="btn-mint flex text-xl md:text-2xl m-3 p-3 md:p-5">
                               <span className="pr-3">Processing</span> 
