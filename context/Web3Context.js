@@ -8,6 +8,8 @@ import Web3 from "web3";
 import {ADDRESS, ABI} from "../config.js"
 import swal from 'sweetalert';
 
+// import { addNetwork, switchNetwork } from 'ethereum.js';
+
 export const WalletContext = React.createContext({});
 
 const WalletContextProvider = ({children}) => {
@@ -18,9 +20,10 @@ const WalletContextProvider = ({children}) => {
   const [walletAddress, setWalletAddress] = useState(null)
 
   const [network, setNetwork] = useState(null)
+  const [networkId, setNetworkId] = useState(0)
 
   // FOR MINTING
-  const [TheArtOfOriContract, setTheArtOfOriContract] = useState(null)
+  const [SouqContract, setSouqContract] = useState(null)
   const [mintResult, setMintResult] = useState(false)
   const [mintStart, setMintStart] = useState(false)
 
@@ -52,6 +55,36 @@ const WalletContextProvider = ({children}) => {
     
   }, [mintResult])
 
+  const addNetwork = async () => {
+    await window.ethereum.request({
+      method: "wallet_addEthereumChain",
+      params: [
+        {
+          chainId: process.env.NEXT_PUBLIC_CHAIN_ID_HEX,  // 0x89
+          chainName: "Polygon",
+          nativeCurrency: {
+            name: "Polygon",
+            symbol: "MATIC",
+            decimals: 18,
+          },
+          rpcUrls: ["https://rpc-mainnet.matic.network"],
+          blockExplorerUrls: ["https://polygonscan.com/"],
+        },
+      ]
+    }).catch((error) => {
+      console.log("addnetowrk: ", error)
+    });
+  }
+  
+    const switchNetwork = () =>
+      window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: process.env.NEXT_PUBLIC_CHAIN_ID_HEX }], // testnet // mainnet
+      }).catch(err => {
+        addNetwork();
+      });
+   
+  
   async function signIn() {
     if (typeof window.web3 !== 'undefined') {
       // Use existing gateway
@@ -65,8 +98,7 @@ const WalletContextProvider = ({children}) => {
                 console.log(network);
                 setNetwork(network)
                 if(network != "main"){
-                  // setNetwork(network)
-                  // Swal("You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here")
+   
                 } 
             }).catch(function (err) {
                 console.log(err)
@@ -77,11 +109,6 @@ const WalletContextProvider = ({children}) => {
 
             notify('Wallet connected!', 'success');
             window.userWalletAddress = userAcc;
-
-
-            // setSignedIn(true)
-
-            // callContractData(wallet)
         })
         .catch(function (error) {
         // Handle error. Likely the user rejected the login
@@ -90,22 +117,21 @@ const WalletContextProvider = ({children}) => {
 
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         const chainNum = parseInt(chainId, 16)
+        
+        setNetworkId(chainNum)
         if (chainNum === 0x89){
-          // notify('Network: Polygon mainnet', 'success');
           setSignedIn(true)
           callContractData(walletAddress)
           Swal("You are on Polygon mainnet")
       
         } else if (chainNum === 0x13881){  //  0x13881 - 80001
-          // notify('Network: Polygon testnet', 'success');
           Swal("You are on Polygon testnet")
           setSignedIn(true)
           callContractData(walletAddress)
         } else {
-          // notify('Please connect Polygon network', 'error');
-          Swal("Please connect Polygon network")
+           switchNetwork()
         }
-        console.log('network id --- ', chainId)    
+        console.log('network id --- ', chainNum)    
       
      
     } else {
@@ -139,45 +165,45 @@ const WalletContextProvider = ({children}) => {
     }
   }
 
-  async function mintTheArtOfOri() {
-      const walletBalance = await getWalletBalance(walletAddress);
-     console.log("============walletBalance==========", walletBalance)
-
-    if(network != "main"){
+  async function mintSouq() {
+    const walletBalance = await getWalletBalance(walletAddress);
+  
+    if(networkId != 137){
       swal({
         title: "Mint Error",
-        text: "You are on " + network+ " network. Change network to mainnet or you won't be able to do anything here",
+        text: "Please change network to Polygon mainnet.",
         icon: "warning",
-        // buttons: true,
         dangerMode: true,
       })
       return                 
     } 
-    if (TheArtOfOriContract) { 
-      const tokenId = 1;
+    if (SouqContract) { 
+      // const tokenId = 1;
       
-      tokenId = (totalSupply + 1)  % 400; 
-      const tokenSupplyById = await TheArtOfOriContract.methods.currentSupply(tokenId).call() 
-      if(tokenSupplyById == 10) return
+      // tokenId = Number(totalSupply) + 1; 
       
-      const price = tokenPrice
-      console.log("tokenPrice=", price)
+      // const price = tokenPrice
+      // console.log("tokenPrice=", price)
 
-      let WalletBalanceWei = window.web3.utils.toWei(`${walletBalance}`, "ether")
+      // let WalletBalanceWei = window.web3.utils.toWei(`${walletBalance}`, "ether")
   
-      console.log("tokenPrice_wei=", WalletBalanceWei)
+      // console.log("tokenPrice_wei=", WalletBalanceWei)
 
-      if(WalletBalanceWei >= price){
+      const tokenId = Number(totalSupply) + 1; 
+      const tokenPriceInEth = window.web3.utils.fromWei(`${tokenPrice}`, "ether");
+
+      if(parseFloat(walletBalance) >= parseFloat(tokenPriceInEth)){
+      // if(WalletBalanceWei >= price){
         setMintStart(true)
 
-        const gasAmount = await TheArtOfOriContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: price})
+        const gasAmount = await SouqContract.methods.mint(tokenId).estimateGas({from: walletAddress, value: tokenPrice})
         console.log("estimated gas",gasAmount)
 
-          console.log({from: walletAddress, value: price})
+          console.log({from: walletAddress, value: tokenPrice})
 
-          TheArtOfOriContract.methods
+          SouqContract.methods
                 .mint(tokenId)
-                .send({from: walletAddress, value: price, gas: String(gasAmount)})
+                .send({from: walletAddress, value: tokenPrice, gas: String(gasAmount)})
                 .on('transactionHash', function(hash){
                   console.log("transactionHash", hash)
                   setMintResult(true)
@@ -196,9 +222,8 @@ const WalletContextProvider = ({children}) => {
       }else{
         swal({
           title: "Mint Error",
-          text: "The your balance is lower, the price of this token is 2 ether.",
+          text: "The your balance is lower, the price of this token is 0.05 Matic.",
           icon: "warning",
-          // buttons: true,
           dangerMode: true,
         })
       }      
@@ -208,7 +233,6 @@ const WalletContextProvider = ({children}) => {
           title: "Connect Error",
           text: "Contract not connected.",
           icon: "warning",
-          // buttons: true,
           dangerMode: true,
         })
     }
@@ -221,10 +245,10 @@ const WalletContextProvider = ({children}) => {
     try {
       let balanceOfContract = await web3.eth.getBalance(ADDRESS)
       if( balanceOfContract > 0){
-        let gasFee = await TheArtOfOriContract.methods.withdraw().estimateGas({
+        let gasFee = await SouqContract.methods.withdraw().estimateGas({
             from: walletAddress, 
         });
-        let result = await TheArtOfOriContract.methods.withdraw().send({
+        let result = await SouqContract.methods.withdraw().send({
             from: walletAddress,
             gas: gasFee
         });
@@ -245,47 +269,36 @@ const WalletContextProvider = ({children}) => {
   }
   
   async function callContractData(wallet) {
-    const myTheArtOfOriContract = new window.web3.eth.Contract(ABI, ADDRESS)
-    setTheArtOfOriContract(myTheArtOfOriContract)
+    const mySouqContract = new window.web3.eth.Contract(ABI, ADDRESS)
+    setSouqContract(mySouqContract)
         
-    const total_Supply = await myTheArtOfOriContract.methods.totalSupply().call() 
+    const total_Supply = await mySouqContract.methods.totalSupply().call() 
     setTotalSupply(total_Supply)
     console.log("===total supply===", totalSupply)
 
-    const token_Price = await myTheArtOfOriContract.methods.tokenPrice().call() 
+    const token_Price = await mySouqContract.methods.tokenPrice().call() 
     setTokenPrice(token_Price)
     console.log("===tokenPrice===", token_Price)
 
-    // const baseURI = await TheArtOfOriContract.methods.baseURI().call() 
-    // console.log("===baseURI===", baseURI)
-
-    // const currentSupply = await TheArtOfOriContract.methods.currentSupply(1).call() 
-    // console.log("===currentSupply===", currentSupply)
-
-    const current_TokenCount = await myTheArtOfOriContract.methods.currentTokenCount().call() 
+    const current_TokenCount = await mySouqContract.methods.currentTokenCount().call() 
     setCurrentTokenCount(current_TokenCount)
     console.log("===currentTokenCount===", currentTokenCount)
 
-    const MAX_TOKEN = await myTheArtOfOriContract.methods.MAX_TOKEN().call() 
+    const MAX_TOKEN = await mySouqContract.methods.MAX_TOKEN().call() 
     setMaxTokenCount(MAX_TOKEN)
     console.log("===max_token===", MAX_TOKEN)
     console.log("===max_token===", maxTokenCount)
 
-  
-    // const EACH_TOKEN_SUPPLY = await myTheArtOfOriContract.methods.EACH_TOKEN_SUPPLY().call() 
-    // console.log("===EACH_TOKEN_SUPPLY===", EACH_TOKEN_SUPPLY)
-    
-    const name = await myTheArtOfOriContract.methods.name().call() 
+    const name = await mySouqContract.methods.name().call() 
     setTokenName(name)
     
-    const symbol = await myTheArtOfOriContract.methods.symbol().call() 
+    const symbol = await mySouqContract.methods.symbol().call() 
     setTokenSymbol(symbol)
     
-    const owner = await myTheArtOfOriContract.methods.owner().call() 
+    const owner = await mySouqContract.methods.owner().call() 
     setTokenOwner(owner.toLowerCase())
-    console.log("+++++= owner =++++++", owner.toLowerCase())
    
-    const uri = await myTheArtOfOriContract.methods.uri(11).call() 
+    const uri = await mySouqContract.methods.uri(11).call() 
     setTokenUri(uri)
   }
 
@@ -295,7 +308,8 @@ const WalletContextProvider = ({children}) => {
             value={{
                 walletAddress,
                 network,
-                TheArtOfOriContract,
+                networkId,
+                SouqContract,
                 // getValue,
                 signIn,
                 signOut,
@@ -311,7 +325,7 @@ const WalletContextProvider = ({children}) => {
                 tokenUri,
                 currentTokenCount,
                 maxTokenCount,
-                mintTheArtOfOri,
+                mintSouq,
                 withdraw,
                 mintStart
             }}

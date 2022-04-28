@@ -1,4 +1,4 @@
-import traits from "../../database/traitsTheArtOfOri.json";
+import traits from "../../database/traitsSouq.json";
 let fs = require("fs");
 
 export default function handler(req, res) {

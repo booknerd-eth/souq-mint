@@ -34,3 +34,5 @@ yarn-error.log*
 
 # traits metadata structure
 # /database
+
+.env

@@ -1,4 +1,4 @@
-import traits from "../../database/traitsTheArtOfOri.json";
+import traits from "../../database/traitsSouq.json";
 
 export default function personHandler({ query: { id } }, res) {
   const lenTraits = traits.length
