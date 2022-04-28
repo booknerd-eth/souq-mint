@@ -5,7 +5,7 @@ import Swal from 'sweetalert'
 import Web3EthContract from "web3-eth-contract";
 import Web3 from "web3";
 
-import {ADDRESS, ABI} from "../config.js"
+import {ADDRESS, ABI, CHAIN_ID} from "../config.js"
 import swal from 'sweetalert';
 
 // import { addNetwork, switchNetwork } from 'ethereum.js';
@@ -54,7 +54,7 @@ const WalletContextProvider = ({children}) => {
       method: "wallet_addEthereumChain",
       params: [
         {
-          chainId: process.env.NEXT_PUBLIC_CHAIN_ID_HEX,  // 0x89
+          chainId: CHAIN_ID,  // 0x89
           chainName: "Polygon",
           nativeCurrency: {
             name: "Polygon",
@@ -73,7 +73,7 @@ const WalletContextProvider = ({children}) => {
     const switchNetwork = () =>
       window.ethereum.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: process.env.NEXT_PUBLIC_CHAIN_ID_HEX }], // testnet // mainnet
+        params: [{ chainId: CHAIN_ID }], // testnet // mainnet
       }).catch(err => {
         addNetwork();
       });
@@ -115,12 +115,7 @@ const WalletContextProvider = ({children}) => {
         if (chainNum === 0x89){
           setSignedIn(true)
           callContractData(walletAddress)
-          Swal("You are on Polygon mainnet")
-      
-        } else if (chainNum === 0x13881){  //  0x13881 - 80001
-          Swal("You are on Polygon testnet")
-          setSignedIn(true)
-          callContractData(walletAddress)
+          // Swal("You are on Polygon mainnet")
         } else {
            switchNetwork()
         }

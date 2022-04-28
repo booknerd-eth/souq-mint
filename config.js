@@ -2,6 +2,8 @@
 // GET YOUR INFURA API ENDPOINT FROM https://infura.io/
 export const INFURA_ADDRESS = ""
 
+export const CHAIN_ID = 0x89
+
 export const ADDRESS = "0xABC550e4Bff18e37c04083dCae2AcF77B6bE6CAd"  // the address on main net
 // export const ADDRESS_TEST = "0x3d2E420d7fC1D5bb54c2252a4D1905DA81cB9c4a"  // the address on test net
 
