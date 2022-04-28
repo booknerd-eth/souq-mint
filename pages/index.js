@@ -7,7 +7,6 @@ import ModalConnectWallet from '@components/Modal'
 import { Button, Ratio, Toast, Row, Col, ToastContainer } from "react-bootstrap";
 import Web3 from "web3";
 
-
 import { WalletContext } from '../context/Web3Context';
 export default function Mint() {
   const [modalShow, setModalShow] = useState(false);

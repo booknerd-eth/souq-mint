@@ -168,10 +168,11 @@ const WalletContextProvider = ({children}) => {
 
       if(parseFloat(walletBalance) >= parseFloat(tokenPriceInEth)){
         setMintStart(true);
-        const gasAmount = await SouqContract.methods.buy().estimateGas({from: walletAddress, value: tokenPrice})
+        const gasPrice = await window.web3.eth.getGasPrice();
+        const gas = await SouqContract.methods.buy().estimateGas({from: walletAddress, value: tokenPrice})
         SouqContract.methods
           .buy()
-          .send({from: walletAddress, value: tokenPrice, gas: String(gasAmount)})
+          .send({from: walletAddress, value: tokenPrice, gas, gasPrice})
           .on('transactionHash', function(hash){
             setMintResult(true)
             swal({
