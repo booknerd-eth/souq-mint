@@ -17,7 +17,7 @@ export default function Mint() {
           tokenPrice, tokenOwner, totalSupply, mintSouq, withdraw, mintStart 
         } = React.useContext(WalletContext);
   
-  if(signedIn === true){
+  if(signedIn === true && walletAddress){
     let reduceWallet = walletAddress.slice(0, 6) + '...' + walletAddress.slice(walletAddress.length-4, walletAddress.length);
   }
 

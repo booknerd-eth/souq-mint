@@ -83,34 +83,14 @@ const WalletContextProvider = ({children}) => {
     if (typeof window.web3 !== 'undefined') {
       // Use existing gateway
       window.web3 = new Web3(window.ethereum);
-        
-        window.ethereum.enable()
-        .then(function (accounts) {
-            window.web3.eth.net.getNetworkType()
-            // checks if connected network is mainnet (change this to rinkeby if you wanna test on testnet)
-            .then((network) => {
-                setNetwork(network)
-                if(network != "main"){
-   
-                } 
-            }).catch(function (err) {
-                console.log(err)
-            });  
 
-            let wallet = accounts[0]
-            setWalletAddress(wallet)
-
-            // notify('Wallet connected!', 'success');
-            // window.userWalletAddress = userAcc;
-        })
-        .catch(function (error) {
-        // Handle error. Likely the user rejected the login
-        console.error(error)
-        })
-
+      try {
+        const accounts = await window.ethereum.enable();
+        const network = await window.web3.eth.net.getNetworkType();
+        const wallet = accounts[0];
+        setWalletAddress(wallet);
         const chainId = await window.ethereum.request({ method: 'eth_chainId' });
         const chainNum = parseInt(chainId, 16)
-        
         setNetworkId(chainNum)
         if (chainNum === 0x89){
           setSignedIn(true)
@@ -119,6 +99,37 @@ const WalletContextProvider = ({children}) => {
         } else {
            switchNetwork()
         }
+      } catch (error) {
+        console.log("error===========================");
+        console.log(error);
+      }
+
+        
+        // window.ethereum.enable()
+        // .then(function (accounts) {
+        //     window.web3.eth.net.getNetworkType()
+        //     // checks if connected network is mainnet (change this to rinkeby if you wanna test on testnet)
+        //     .then((network) => {
+        //         setNetwork(network)
+        //         if(network != "main"){
+   
+        //         } 
+        //     }).catch(function (err) {
+        //         console.log(err)
+        //     });  
+
+        //     let wallet = accounts[0]
+        //     setWalletAddress(wallet)
+
+        //     // notify('Wallet connected!', 'success');
+        //     // window.userWalletAddress = userAcc;
+        // })
+        // .catch(function (error) {
+        // // Handle error. Likely the user rejected the login
+        // console.error(error)
+        // })
+
+        
     } else {
       swal({
         title: "Please install metamask!",
@@ -205,12 +216,14 @@ const WalletContextProvider = ({children}) => {
     try {
       let balanceOfContract = await web3.eth.getBalance(ADDRESS)
       if( balanceOfContract > 0){
-        let gasFee = await SouqContract.methods.withdraw().estimateGas({
+        const gasPrice = await window.web3.eth.getGasPrice();
+        const gasFee = await SouqContract.methods.withdraw().estimateGas({
             from: walletAddress, 
         });
-        let result = await SouqContract.methods.withdraw().send({
+        const result = await SouqContract.methods.withdraw().send({
             from: walletAddress,
-            gas: gasFee
+            gas: gasFee,
+            gasPrice
         });
         return result;
       } else {
