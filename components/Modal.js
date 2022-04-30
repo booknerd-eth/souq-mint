@@ -5,6 +5,21 @@ import { Modal, Button, Accordion } from 'react-bootstrap';
 
 const ModalConnectWallet = ({ signin, signedin ,...props}) => {
 
+  const [metamaskInstalled, setMetamaskInstalled] = useState(false);
+
+  useEffect(() => {
+    if (window) {
+      setMetamaskInstalled(!!window.ethereum);
+    } else {
+      setMetamaskInstalled(false);
+    }
+  });
+
+    // const checkMetaMaskInstalled = () => {
+    //   const { ethereum } = window;
+    //   return !!ethereum;
+    // }
+
     return( <Modal
             {...props}
             size="md"
@@ -64,18 +79,29 @@ const ModalConnectWallet = ({ signin, signedin ,...props}) => {
             </Modal.Header>
             <Modal.Body>
               <h5>Please select a wallet to connect to this dapp</h5>
-              { signedin !== true ?
-                <button type="button" onClick={signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3">
-                  <img src="./images/metamask.png" className="mx-3" width="30"/>
-                  MetaMask
-                </button>     
-                :
-                <button type="button" onClick={signin} className="rounded-full w-full text-xl bg-gray-300 shadow-lg shadow-cyan-500/50 border-2 border-gray-300 flex items-center p-3 my-3">
-                  <img src="./images/metamask.png" className="mx-3" width="30"/>
-                  MetaMask
-                  <span className="flex w-full justify-end italic text-sm pr-3">
-                    ( connected )</span>
-                </button>
+              {
+                !metamaskInstalled? (
+                  <a className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3"
+                    href="https://metamask.app.link/dapp/mint.souq.gg"
+                    rel="noreferrer noopener"
+                    target="_blank"
+                  >
+                    <img src="./images/metamask.png" className="mx-3" width="30"/>
+                    Install MetaMask
+                  </a>
+                ) : signedin !== true ? (
+                  <button type="button" onClick={signin} className="rounded-full w-full text-xl hover:shadow-lg shadow-cyan-500/50 border-1 border-gray-300 hover:border-gray-300 flex items-center p-3 my-3">
+                    <img src="./images/metamask.png" className="mx-3" width="30"/>
+                    MetaMask
+                  </button>
+                ) : (
+                  <button type="button" onClick={signin} className="rounded-full w-full text-xl bg-gray-300 shadow-lg shadow-cyan-500/50 border-2 border-gray-300 flex items-center p-3 my-3">
+                    <img src="./images/metamask.png" className="mx-3" width="30"/>
+                    MetaMask
+                    <span className="flex w-full justify-end italic text-sm pr-3">
+                      ( connected )</span>
+                  </button>
+                )
               }
               <Accordion defaultActiveKey="1">
                 <Accordion.Item eventKey="0">

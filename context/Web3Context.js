@@ -40,96 +40,75 @@ const WalletContextProvider = ({children}) => {
 
   }, [signedIn])
   
-  useEffect( () => { 
+  useEffect( () => {
     if(signedIn == true){
       callContractData(walletAddress)
       setMintResult(false)
       setMintStart(false)
     }
     
-  }, [mintResult])
+  }, [mintResult]);
 
   const addNetwork = async () => {
-    await window.ethereum.request({
-      method: "wallet_addEthereumChain",
-      params: [
-        {
-          chainId: CHAIN_ID,  // 0x89
-          chainName: "Polygon",
-          nativeCurrency: {
-            name: "Polygon",
-            symbol: "MATIC",
-            decimals: 18,
+    try {
+      await window.ethereum.request({
+        method: "wallet_addEthereumChain",
+        params: [
+          {
+            chainId: CHAIN_ID,  // 0x89
+            chainName: "Polygon Mainnet",
+            nativeCurrency: {
+              name: "Polygon",
+              symbol: "MATIC",
+              decimals: 18,
+            },
+            rpcUrls: ["https://rpc-mainnet.matic.network"],
+            blockExplorerUrls: ["https://polygonscan.com/"],
           },
-          rpcUrls: ["https://rpc-mainnet.matic.network"],
-          blockExplorerUrls: ["https://polygonscan.com/"],
-        },
-      ]
-    }).catch((error) => {
-      console.log("addnetowrk: ", error)
-    });
+        ]
+      })
+    } catch(error) {
+      throw error;
+    };
   }
-  
-    const switchNetwork = () =>
-      window.ethereum.request({
+
+  const switchNetwork = async() => {
+    try {
+      const result = await window.ethereum.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: CHAIN_ID }], // testnet // mainnet
-      }).catch(err => {
-        addNetwork();
       });
-   
-  
+    } catch (err) {
+      let error_msg = "";
+      if (err.code === 4902) {
+        await addNetwork();
+      } else {
+        throw err;
+      }
+    }
+  }
+
   async function signIn() {
     if (typeof window.web3 !== 'undefined') {
       // Use existing gateway
       window.web3 = new Web3(window.ethereum);
 
       try {
+        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+        const chainNum = parseInt(chainId, 16);
+        if (chainNum !== 0x89) {
+          await switchNetwork();
+        }
+        setNetworkId(0x89);
         const accounts = await window.ethereum.enable();
         const network = await window.web3.eth.net.getNetworkType();
         const wallet = accounts[0];
         setWalletAddress(wallet);
-        const chainId = await window.ethereum.request({ method: 'eth_chainId' });
-        const chainNum = parseInt(chainId, 16)
-        setNetworkId(chainNum)
-        if (chainNum === 0x89){
-          setSignedIn(true)
-          callContractData(walletAddress)
-          // Swal("You are on Polygon mainnet")
-        } else {
-           switchNetwork()
-        }
+        setSignedIn(true);
+        callContractData(walletAddress);
       } catch (error) {
-        console.log("error===========================");
         console.log(error);
-      }
-
-        
-        // window.ethereum.enable()
-        // .then(function (accounts) {
-        //     window.web3.eth.net.getNetworkType()
-        //     // checks if connected network is mainnet (change this to rinkeby if you wanna test on testnet)
-        //     .then((network) => {
-        //         setNetwork(network)
-        //         if(network != "main"){
-   
-        //         } 
-        //     }).catch(function (err) {
-        //         console.log(err)
-        //     });  
-
-        //     let wallet = accounts[0]
-        //     setWalletAddress(wallet)
-
-        //     // notify('Wallet connected!', 'success');
-        //     // window.userWalletAddress = userAcc;
-        // })
-        // .catch(function (error) {
-        // // Handle error. Likely the user rejected the login
-        // console.error(error)
-        // })
-
-        
+      } 
     } else {
       swal({
         title: "Please install metamask!",
